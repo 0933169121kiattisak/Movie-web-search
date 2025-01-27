@@ -8,10 +8,10 @@
  3. Core Functionality
     - State Management
       ``` const [state, setState] = useState({
-  s: "sherlock",        // search query
-  results: [],          // search results
-  seleted: {}          // selected movie details
-}); ```
+          s: "sherlock",        // search query
+          results: [],          // search results
+          seleted: {}          // selected movie details
+          }); ```
 
 
 
