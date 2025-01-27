@@ -24,6 +24,14 @@
      - Can be closed to return to search results
 4. Key Technical Features
    - API Integration: Uses axios for HTTP requests to OMDB API
+   - Event Handling:
+     - Input change handling (searchInput)
+     - Enter key press detection (search)
+     - Click handling for movie selection (openDetail)
+  - Conditional Rendering: Shows/hides detail view based on selection
+  - State Updates: Uses proper React state management with prevState
+5. Data Flow
+   ``` User Input → API Call → Update State → Render Results → Select Movie → Show Details ```
 
 
 
