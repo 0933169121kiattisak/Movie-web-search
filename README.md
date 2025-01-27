@@ -7,5 +7,10 @@
     - Detail.js: Component for displaying detailed movie information
  3. Core Functionality
     - State Management
+      ``` const [state, setState] = useState({
+  s: "sherlock",        // search query
+  results: [],          // search results
+  seleted: {}          // selected movie details
+});
 
 
