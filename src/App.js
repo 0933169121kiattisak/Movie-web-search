@@ -1,81 +1,98 @@
-import "./App.css";
-import axios from "axios";
-import Detail from "./components/Detail";
-import Search from "./components/Search";
-import { useState } from "react";
+// App.js
+import { useState } from 'react';
+import axios from 'axios';
+import Search from './components/Search';
+import Detail from './components/Detail';
+import './App.css';
 
 function App() {
   const [state, setState] = useState({
-    s: "sherlock",
+    searchQuery: '',
     results: [],
-    seleted: {},
+    selected: {}
   });
 
-  const apiUrl = "https://www.omdbapi.com/?apikey=a2526df0";
+  const apiUrl = "https://www.omdbapi.com/?apikey=c7ab2c0b"; // Replace with your API key
 
-  const searchInput = (e) => {
-    let s = e.target.value;
-
-    setState((prevState) => {
-      return { ...prevState, s: s };
-    });
+  const handleSearchInput = (e) => {
+    setState(prev => ({
+      ...prev,
+      searchQuery: e.target.value
+    }));
   };
 
-  const search = (e) => {
-    console.log(e.target.value)
-    if (e.key === "Enter") {
-      axios(apiUrl + "&s=" + state.s).then(({ data }) => {
-        let results = data.Search;
-
-        console.log(results);
-
-        setState((prevState) => {
-          return { ...prevState, results: results };
-        });
-      });
+  const handleSearch = async (e) => {
+    if (e.key === "Enter" && state.searchQuery) {
+      try {
+        const response = await axios.get(`${apiUrl}&s=${state.searchQuery}`);
+        if (response.data.Search) {
+          setState(prev => ({
+            ...prev,
+            results: response.data.Search
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
     }
   };
 
-  const openDetail = (id) => {
-    axios(apiUrl + "&i=" + id).then(({ data }) => {
-      let result = data;
-      setState((prevState) => {
-        return { ...prevState, seleted: result };
-      });
-    });
+  const handleMovieSelect = async (id) => {
+    try {
+      const response = await axios.get(`${apiUrl}&i=${id}`);
+      setState(prev => ({
+        ...prev,
+        selected: response.data
+      }));
+    } catch (error) {
+      console.error('Error fetching movie details:', error);
+    }
   };
 
-  const closeDatail = () => {
-    setState((prevState) => {
-      return { ...prevState, seleted: {} };
-    });
+  const handleCloseDetail = () => {
+    setState(prev => ({
+      ...prev,
+      selected: {}
+    }));
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Movie Mania</h1>
+        <h1>Movie Search App</h1>
       </header>
       <main>
-        <Search searchInput={searchInput} search={search} />
-        <div className="container">
-          {state.results.map((e) => (
-            <div className="item" onClick={() => openDetail(e.imdbID)}>
-              <img src={e.Poster} alt=""/>
-              <h3>{e.Title}</h3>
+        <Search 
+          value={state.searchQuery}
+          onInputChange={handleSearchInput}
+          onKeyPress={handleSearch}
+        />
+        <div className="movies-grid">
+          {state.results.map(movie => (
+            <div 
+              key={movie.imdbID}
+              className="movie-card"
+              onClick={() => handleMovieSelect(movie.imdbID)}
+            >
+              <img 
+                src={movie.Poster !== 'N/A' ? movie.Poster : '/placeholder.png'} 
+                alt={movie.Title}
+              />
+              <h3>{movie.Title}</h3>
+              <p>{movie.Year}</p>
             </div>
           ))}
         </div>
-        {typeof state.seleted.Title != "undefined" ? (
-          <Detail selected={state.seleted} closeDetail={closeDatail} />
-        ) : (
-          false
-        )} 
+        {Object.keys(state.selected).length > 0 && (
+          <Detail 
+            movie={state.selected} 
+            onClose={handleCloseDetail}
+          />
+        )}
       </main>
     </div>
   );
 }
 
 export default App;
-
 
