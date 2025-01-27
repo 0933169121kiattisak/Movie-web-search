@@ -11,7 +11,8 @@
           s: "sherlock",        // search query
           results: [],          // search results
           seleted: {}          // selected movie details
-          }); ```
+          });
+      ```
 
 
 
