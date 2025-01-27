@@ -13,6 +13,17 @@
           seleted: {}          // selected movie details
           });
       ```
+   - Search Implementation
+     - Users can type movie names in the search bar
+     - Search is triggered when Enter key is pressed
+     - Uses axios to make API calls to OMDB
+     - Results are displayed as movie cards with posters
+   - Detail View
+     - Clicking on a movie card shows detailed information
+     - Displays title, year, rating, poster, and plot
+     - Can be closed to return to search results
+4. Key Technical Features
+   - API Integration: Uses axios for HTTP requests to OMDB API
 
 
 
